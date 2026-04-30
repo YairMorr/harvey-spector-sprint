@@ -72,12 +72,12 @@ export function NewsSection() {
       </div>
 
       {/* ── Desktop ── */}
-      <div className="hidden md:flex items-end justify-between gap-8">
+      <div className="hidden md:flex items-end gap-8">
 
-        {/* Rotated heading */}
-        <div className="flex items-center justify-center shrink-0 w-[110px] h-[706px]">
+        {/* Rotated heading — fixed width */}
+        <div className="flex items-center justify-center shrink-0 w-[110px] self-stretch">
           <h2
-            className="font-light text-black text-[64px] tracking-[-5.12px] leading-[0.86] uppercase whitespace-nowrap"
+            className="font-light text-black text-[4vw] xl:text-[64px] tracking-[-0.08em] leading-[0.86] uppercase whitespace-nowrap"
             style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
           >
             <span className="block">Keep up with my latest</span>
@@ -85,14 +85,12 @@ export function NewsSection() {
           </h2>
         </div>
 
-        {/* Three article cards with dividers */}
-        <div className="flex gap-0 items-start flex-1">
+        {/* Three article cards — fluid, equal width */}
+        <div className="flex gap-0 items-start flex-1 min-w-0">
           {POSTS.map((post, i) => (
             <Fragment key={i}>
-              <div
-                className={`flex flex-col gap-4 w-[353px] shrink-0 ${post.offset ? "pt-[120px]" : "h-[581px]"}`}
-              >
-                <div className="relative h-[469px] w-full overflow-hidden shrink-0">
+              <div className={`flex flex-col gap-4 flex-1 min-w-0 ${post.offset ? "pt-[15%]" : ""}`}>
+                <div className="relative w-full overflow-hidden" style={{ aspectRatio: '3/4' }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={post.image}
@@ -100,15 +98,14 @@ export function NewsSection() {
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                 </div>
-                <p className="text-[#1f1f1f] text-[14px] leading-[1.3] tracking-[-0.56px] flex-1">
+                <p className="text-[#1f1f1f] text-[14px] leading-[1.3] tracking-[-0.56px]">
                   {post.description}
                 </p>
                 <ReadMore />
               </div>
 
-              {/* Vertical divider between cards */}
               {i < POSTS.length - 1 && (
-                <div className="self-stretch w-px bg-black/20 mx-8 shrink-0" />
+                <div className="self-stretch w-px bg-black/20 mx-4 xl:mx-8 shrink-0" />
               )}
             </Fragment>
           ))}
