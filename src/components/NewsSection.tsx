@@ -50,11 +50,11 @@ export function NewsSection() {
           Keep up with my latest news &amp; achievements
         </h2>
 
-        {/* Cards — horizontal scroll on mobile */}
-        <div className="flex gap-4 overflow-x-auto pb-2 -mr-4 pr-4">
+        {/* Cards — stacked vertically on mobile */}
+        <div className="flex flex-col gap-8">
           {POSTS.map((post, i) => (
-            <div key={i} className="flex flex-col gap-4 shrink-0 w-[300px]">
-              <div className="relative h-[398px] w-full overflow-hidden">
+            <div key={i} className="flex flex-col gap-4 w-full">
+              <div className="relative w-full overflow-hidden" style={{ aspectRatio: '3/2' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={post.image}

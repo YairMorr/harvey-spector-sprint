@@ -14,7 +14,7 @@ export default function Home() {
     <section className="relative h-screen overflow-hidden flex flex-col justify-between md:justify-start px-4 md:px-8 pb-6 md:pb-0 md:gap-[240px]">
 
       {/* Background images */}
-      <div className="md:hidden absolute inset-0 bg-cover bg-center" style={{ backgroundImage: 'url("/harvey-hero-mobile.jpg")' }} />
+      <div className="md:hidden absolute inset-0 bg-cover bg-top" style={{ backgroundImage: 'url("/harvey-hero-mobile.jpg")', backgroundPositionX: '50%' }} />
       <div className="hidden md:block absolute inset-0 bg-cover bg-top" style={{ backgroundImage: 'url("/harvey-hero.jpg")' }} />
 
       {/* Backdrop blur — fades in from transparent at top to full blur at bottom */}
