@@ -85,18 +85,15 @@ export function NewsSection() {
           </h2>
         </div>
 
-        {/* Scroll-snap card slider
-            Width = min(1020px, available space after heading + gap)
-            This preserves the Figma gap at large viewports and shrinks cleanly below */}
+        {/* Cards slider:
+            - flex-1 min-w-0 lets the container be narrower than its content → triggers scroll
+            - When all cards fit (wide viewport) → no scroll, all visible normally
+            - When they don't fit → horizontal scroll with snap */}
         <div
-          className="overflow-x-auto"
-          style={{
-            width: 'min(1020px, calc(100% - 142px))',
-            scrollSnapType: 'x mandatory',
-            scrollbarWidth: 'none',
-          }}
+          className="flex-1 min-w-0 overflow-x-auto"
+          style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}
         >
-          <div className="flex gap-[31px] items-start w-max">
+          <div className="flex gap-[31px] items-start">
             {POSTS.map((post, i) => (
               <div
                 key={i}
