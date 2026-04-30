@@ -27,7 +27,7 @@ function ProjectCard({ project }: { project: Project }) {
         />
         {/* Tag pills */}
         <div className="absolute bottom-4 left-4 flex gap-3 items-center">
-          {(project.tags ?? []).map((tag) => (
+          {(project.tags ?? []).map((tag: string) => (
             <span
               key={tag}
               className="backdrop-blur-[10px] bg-white/30 px-2 py-1 rounded-full text-[14px] font-medium text-[#111] tracking-[-0.56px] whitespace-nowrap"
