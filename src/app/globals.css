@@ -17,3 +17,6 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
+
+/* Hide scrollbar on the news card slider while keeping scroll behaviour */
+.news-slider::-webkit-scrollbar { display: none; }

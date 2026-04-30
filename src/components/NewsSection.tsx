@@ -72,9 +72,9 @@ export function NewsSection() {
       </div>
 
       {/* ── Desktop ── */}
-      <div className="hidden md:flex items-end justify-between">
+      <div className="hidden md:flex items-end">
 
-        {/* Rotated heading — fixed 110px column, same as Figma */}
+        {/* Rotated heading — fixed 110px column */}
         <div className="shrink-0 w-[110px] h-[706px] flex items-center justify-center">
           <h2
             className="font-light text-black text-[64px] tracking-[-5.12px] leading-[0.86] uppercase whitespace-nowrap"
@@ -85,17 +85,18 @@ export function NewsSection() {
           </h2>
         </div>
 
+        {/* Fixed gap — matches Figma 246px at full width, scales with viewport */}
+        <div className="shrink-0" style={{ width: 'clamp(60px, 17vw, 246px)' }} />
+
         {/* Cards slider:
-            Width = min(1121px, available) where 1121 = 3×353 + 2×31 (all cards + gaps).
-            At wide viewports the container fits all 3 cards — no scroll needed.
-            At narrower viewports it shrinks and overflow-x scroll kicks in. */}
+            - flex-1 min-w-0: fills remaining space
+            - overflow-x-scroll: allows swipe, clips cards outside bounds
+            - news-slider: hides the webkit scrollbar via globals.css
+            - scrollbarWidth none: hides scrollbar in Firefox
+            - scroll-snap snaps cleanly to each card */}
         <div
-          className="shrink-0 overflow-x-auto"
-          style={{
-            width: 'min(1121px, calc(100% - 142px))',
-            scrollSnapType: 'x mandatory',
-            scrollbarWidth: 'none',
-          }}
+          className="news-slider flex-1 min-w-0 overflow-x-scroll"
+          style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}
         >
           <div className="flex gap-[31px] items-start">
             {POSTS.map((post, i) => (
