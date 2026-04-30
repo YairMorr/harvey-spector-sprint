@@ -1,4 +1,4 @@
-import { client } from '@/sanity/lib/client'
+import { sanityFetch } from '@/sanity/lib/live'
 import { urlFor } from '@/sanity/lib/image'
 import { PORTFOLIO_PROJECTS_QUERY } from '@/sanity/queries/portfolio'
 
@@ -18,7 +18,8 @@ interface Project {
 }
 
 async function fetchProjects(): Promise<Project[]> {
-  return client.fetch(PORTFOLIO_PROJECTS_QUERY, {}, { next: { revalidate: 60 } })
+  const { data } = await sanityFetch({ query: PORTFOLIO_PROJECTS_QUERY })
+  return data
 }
 
 function ProjectCard({ project }: { project: Project }) {
