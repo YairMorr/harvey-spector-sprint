@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 const POSTS = [
   {
     image: "/news-1.jpg",
@@ -86,9 +88,8 @@ export function NewsSection() {
         {/* Three article cards with dividers */}
         <div className="flex gap-0 items-start flex-1">
           {POSTS.map((post, i) => (
-            <>
+            <Fragment key={i}>
               <div
-                key={i}
                 className={`flex flex-col gap-4 w-[353px] shrink-0 ${post.offset ? "pt-[120px]" : "h-[581px]"}`}
               >
                 <div className="relative h-[469px] w-full overflow-hidden shrink-0">
@@ -107,9 +108,9 @@ export function NewsSection() {
 
               {/* Vertical divider between cards */}
               {i < POSTS.length - 1 && (
-                <div key={`divider-${i}`} className="self-stretch w-px bg-black/20 mx-8 shrink-0" />
+                <div className="self-stretch w-px bg-black/20 mx-8 shrink-0" />
               )}
-            </>
+            </Fragment>
           ))}
         </div>
 
