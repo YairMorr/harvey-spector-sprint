@@ -96,7 +96,7 @@ export function NewsSection() {
             scrollbarWidth: 'none',
           }}
         >
-          <div className="flex gap-[31px] items-start">
+          <div className="flex gap-[31px] items-start w-max">
             {POSTS.map((post, i) => (
               <div
                 key={i}
