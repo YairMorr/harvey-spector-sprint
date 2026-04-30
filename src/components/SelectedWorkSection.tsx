@@ -2,9 +2,22 @@ import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { PORTFOLIO_PROJECTS_QUERY } from '@/sanity/queries/portfolio'
 
-type Project = Awaited<ReturnType<typeof fetchProjects>>[number]
+interface Project {
+  _id: string
+  title: string | null
+  coverImage?: {
+    asset?: { _id: string; url: string } | null
+    alt?: string | null
+    hotspot?: unknown
+    crop?: unknown
+  } | null
+  tags?: string[] | null
+  imageSize?: 'tall' | 'standard' | null
+  order?: number | null
+  projectUrl?: string | null
+}
 
-async function fetchProjects() {
+async function fetchProjects(): Promise<Project[]> {
   return client.fetch(PORTFOLIO_PROJECTS_QUERY, {}, { next: { revalidate: 60 } })
 }
 
