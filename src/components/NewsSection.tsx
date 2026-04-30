@@ -86,12 +86,16 @@ export function NewsSection() {
         </div>
 
         {/* Cards slider:
-            - flex-1 min-w-0 lets the container be narrower than its content → triggers scroll
-            - When all cards fit (wide viewport) → no scroll, all visible normally
-            - When they don't fit → horizontal scroll with snap */}
+            Width = min(1121px, available) where 1121 = 3×353 + 2×31 (all cards + gaps).
+            At wide viewports the container fits all 3 cards — no scroll needed.
+            At narrower viewports it shrinks and overflow-x scroll kicks in. */}
         <div
-          className="flex-1 min-w-0 overflow-x-auto"
-          style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}
+          className="shrink-0 overflow-x-auto"
+          style={{
+            width: 'min(1121px, calc(100% - 142px))',
+            scrollSnapType: 'x mandatory',
+            scrollbarWidth: 'none',
+          }}
         >
           <div className="flex gap-[31px] items-start">
             {POSTS.map((post, i) => (
