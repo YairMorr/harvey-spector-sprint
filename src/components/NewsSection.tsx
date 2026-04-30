@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import { NewsDragSlider } from "./NewsDragSlider";
 
 const POSTS = [
   {
@@ -42,7 +43,7 @@ function ReadMore() {
 
 export function NewsSection() {
   return (
-    <section className="bg-[#f3f3f3] px-4 md:px-8 py-16 md:py-[120px]">
+    <section className="bg-[#f3f3f3] px-4 md:px-8 py-16 md:py-[120px] overflow-x-hidden">
 
       {/* ── Mobile ── */}
       <div className="md:hidden flex flex-col gap-8">
@@ -88,16 +89,8 @@ export function NewsSection() {
         {/* Fixed gap — matches Figma 246px at full width, scales with viewport */}
         <div className="shrink-0" style={{ width: 'clamp(60px, 17vw, 246px)' }} />
 
-        {/* Cards slider:
-            - flex-1 min-w-0: fills remaining space
-            - overflow-x-scroll: allows swipe, clips cards outside bounds
-            - news-slider: hides the webkit scrollbar via globals.css
-            - scrollbarWidth none: hides scrollbar in Firefox
-            - scroll-snap snaps cleanly to each card */}
-        <div
-          className="news-slider flex-1 min-w-0 overflow-x-scroll"
-          style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none' }}
-        >
+        {/* Drag slider — client component handles mouse drag + hides scrollbar */}
+        <NewsDragSlider>
           <div className="flex gap-[31px] items-start">
             {POSTS.map((post, i) => (
               <div
@@ -120,7 +113,7 @@ export function NewsSection() {
               </div>
             ))}
           </div>
-        </div>
+        </NewsDragSlider>
 
       </div>
     </section>
