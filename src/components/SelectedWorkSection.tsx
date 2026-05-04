@@ -1,3 +1,4 @@
+import { LetsTalkButton } from './LetsTalkButton'
 import { sanityFetch } from '@/sanity/lib/live'
 import { urlFor } from '@/sanity/lib/image'
 import { PORTFOLIO_PROJECTS_QUERY } from '@/sanity/queries/portfolio'
@@ -27,12 +28,15 @@ function ProjectCard({ project }: { project: Project }) {
     ? urlFor(project.coverImage).width(900).url()
     : ''
 
-  const desktopHeight = project.imageSize === 'tall' ? 'md:h-[744px]' : 'md:h-[699px]'
+  const desktopAspect = project.imageSize === 'tall' ? '10 / 11' : '1 / 1'
 
   return (
     <div className="flex flex-col gap-[10px] w-full">
-      {/* Image */}
-      <div className={`relative h-[390px] ${desktopHeight} w-full overflow-hidden`}>
+      {/* Image — fixed height on mobile, aspect-ratio-driven on desktop */}
+      <div
+        className="relative h-[390px] md:h-auto w-full overflow-hidden"
+        style={{ aspectRatio: desktopAspect }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={imageSrc}
@@ -82,9 +86,7 @@ function CtaBox() {
           Discover how my creativity transforms ideas into impactful digital
           experiences — schedule a call with me to get started.
         </p>
-        <button className="bg-black text-white text-sm font-medium tracking-[-0.56px] px-4 py-3 rounded-[24px] hover:bg-zinc-800 transition-colors">
-          Let&apos;s talk
-        </button>
+        <LetsTalkButton variant="default" />
       </div>
     </div>
   )
@@ -94,7 +96,7 @@ export async function SelectedWorkSection() {
   const projects = await fetchProjects()
 
   return (
-    <section className="px-4 md:px-8 py-12 md:py-[80px] flex flex-col gap-8 md:gap-[61px]">
+    <section className="px-4 md:px-8 py-12 md:py-[80px] flex flex-col gap-8 md:gap-[61px] overflow-x-hidden">
 
       {/* Header */}
       <div className="flex items-start justify-between w-full">
@@ -130,12 +132,12 @@ export async function SelectedWorkSection() {
 
       {/* Desktop: two columns — left [0,1] + CTA, right [2,3] offset 240px */}
       <div className="hidden md:flex gap-6 items-end w-full">
-        <div className="flex-1 flex flex-col justify-between gap-[10px]">
+        <div className="flex-1 min-w-0 flex flex-col justify-between gap-[10px]">
           {projects[0] && <ProjectCard project={projects[0]} />}
           {projects[1] && <ProjectCard project={projects[1]} />}
           <CtaBox />
         </div>
-        <div className="flex-1 flex flex-col gap-[117px] pt-[240px]">
+        <div className="flex-1 min-w-0 flex flex-col gap-[117px] pt-[240px]">
           {projects[2] && <ProjectCard project={projects[2]} />}
           {projects[3] && <ProjectCard project={projects[3]} />}
         </div>

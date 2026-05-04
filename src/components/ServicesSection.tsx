@@ -31,7 +31,7 @@ const SERVICES = [
 
 export function ServicesSection() {
   return (
-    <section className="bg-black px-4 md:px-8 py-12 md:py-[80px] flex flex-col gap-8 md:gap-[48px]">
+    <section data-nav-dark className="bg-black px-4 md:px-8 py-12 md:py-[80px] flex flex-col gap-8 md:gap-[48px] overflow-x-hidden">
 
       {/* [ services ] */}
       <span className="font-mono text-sm text-white uppercase leading-[1.1]">
@@ -56,7 +56,7 @@ export function ServicesSection() {
             <div className="w-full h-px bg-white/20" />
 
             {/* Content — stacked on mobile, row on desktop */}
-            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between flex-wrap">
 
               {/* Title */}
               <h3 className="font-bold italic text-white uppercase text-[36px] tracking-[-1.44px] leading-[1.1] shrink-0">

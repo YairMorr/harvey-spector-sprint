@@ -2,40 +2,46 @@
 import { useRef } from 'react'
 
 export function NewsDragSlider({ children }: { children: React.ReactNode }) {
-  const sliderRef = useRef<HTMLDivElement>(null)
-  const isDragging = useRef(false)
-  const startX = useRef(0)
-  const scrollStart = useRef(0)
+  const innerRef = useRef<HTMLDivElement>(null)
+  const drag = useRef({ active: false, startX: 0, scrollLeft: 0 })
 
-  function onMouseDown(e: React.MouseEvent) {
-    isDragging.current = true
-    startX.current = e.pageX
-    scrollStart.current = sliderRef.current?.scrollLeft ?? 0
-    sliderRef.current?.style.setProperty('cursor', 'grabbing')
+  function start(clientX: number) {
+    const el = innerRef.current
+    if (!el) return
+    drag.current = { active: true, startX: clientX, scrollLeft: el.scrollLeft }
   }
 
-  function onMouseMove(e: React.MouseEvent) {
-    if (!isDragging.current || !sliderRef.current) return
-    e.preventDefault()
-    sliderRef.current.scrollLeft = scrollStart.current - (e.pageX - startX.current)
+  function move(clientX: number) {
+    if (!drag.current.active || !innerRef.current) return
+    innerRef.current.scrollLeft = drag.current.scrollLeft - (clientX - drag.current.startX)
   }
 
-  function stopDrag() {
-    isDragging.current = false
-    sliderRef.current?.style.setProperty('cursor', 'grab')
+  function end() {
+    drag.current.active = false
   }
 
   return (
-    <div
-      ref={sliderRef}
-      className="news-slider flex-1 min-w-0 overflow-x-scroll select-none"
-      style={{ scrollSnapType: 'x mandatory', scrollbarWidth: 'none', cursor: 'grab' }}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={stopDrag}
-      onMouseLeave={stopDrag}
-    >
-      {children}
+    // Outer: overflow:hidden clips the scrollbar out of view
+    <div className="flex min-w-0 overflow-hidden active:cursor-grabbing select-none justify-end">
+      {/* Inner: actually scrollable; paddingBottom pushes scrollbar below the clipping boundary */}
+      <div
+        ref={innerRef}
+        className="overflow-x-scroll news-slider"
+        style={{
+          scrollbarWidth: 'none',   // Firefox
+          paddingBottom: 20,        // push scrollbar below visible area
+          marginBottom: -20,        // cancel the extra height so layout is unaffected
+        }}
+        onMouseDown={(e) => { start(e.clientX); e.currentTarget.style.cursor = 'grabbing' }}
+        onMouseMove={(e) => move(e.clientX)}
+        onMouseUp={(e) => { end(); e.currentTarget.style.cursor = '' }}
+        onMouseLeave={(e) => { end(); e.currentTarget.style.cursor = '' }}
+        onTouchStart={(e) => start(e.touches[0].clientX)}
+        onTouchMove={(e) => move(e.touches[0].clientX)}
+        onTouchEnd={() => end()}
+      >
+        {children}
+      </div>
     </div>
   )
 }

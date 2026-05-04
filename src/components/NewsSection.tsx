@@ -43,7 +43,7 @@ function ReadMore() {
 
 export function NewsSection() {
   return (
-    <section className="bg-[#f3f3f3] px-4 md:px-8 py-16 md:py-[120px] overflow-x-hidden">
+    <section className="bg-[#f3f3f3] px-4 md:pl-8 md:pr-8 py-16 md:py-[120px] overflow-x-hidden">
 
       {/* ── Mobile ── */}
       <div className="md:hidden flex flex-col gap-8">
@@ -73,10 +73,13 @@ export function NewsSection() {
       </div>
 
       {/* ── Desktop ── */}
-      <div className="hidden md:flex items-end">
+      <div
+        className="hidden md:flex justify-between"
+        style={{ gap: 'clamp(246px, 17vw, 17vw)' }}
+      >
 
         {/* Rotated heading — fixed 110px column */}
-        <div className="shrink-0 w-[110px] h-[706px] flex items-center justify-center">
+        <div className="shrink-0 w-[110px] h-[706px] flex items-center justify-center" >
           <h2
             className="font-light text-black text-[64px] tracking-[-5.12px] leading-[0.86] uppercase whitespace-nowrap"
             style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
@@ -86,31 +89,29 @@ export function NewsSection() {
           </h2>
         </div>
 
-        {/* Fixed gap — matches Figma 246px at full width, scales with viewport */}
-        <div className="shrink-0" style={{ width: 'clamp(60px, 17vw, 246px)' }} />
-
-        {/* Drag slider — client component handles mouse drag + hides scrollbar */}
+        {/* Drag slider — fills remaining space, slider clips content and allows drag */}
         <NewsDragSlider>
-          <div className="flex gap-[31px] items-start">
+          <div className="flex items-start w-fit">
             {POSTS.map((post, i) => (
-              <div
-                key={i}
-                className={`shrink-0 flex flex-col gap-4 w-[353px] ${post.offset ? "pt-[120px]" : "h-[581px]"}`}
-                style={{ scrollSnapAlign: 'start' }}
-              >
-                <div className="relative h-[469px] w-full overflow-hidden shrink-0">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={post.image}
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
+              <Fragment key={i}>
+                {i > 0 && <div className="shrink-0 self-stretch w-px bg-black/20 mx-[15px]" />}
+                <div
+                  className={`shrink-0 flex flex-col gap-4 w-[353px] ${post.offset ? "pt-[120px]" : "h-[581px]"}`}
+                >
+                  <div className="relative h-[469px] w-full overflow-hidden shrink-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={post.image}
+                      alt=""
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                  <p className="text-[#1f1f1f] text-[14px] leading-[1.3] tracking-[-0.56px] flex-1">
+                    {post.description}
+                  </p>
+                  <ReadMore />
                 </div>
-                <p className="text-[#1f1f1f] text-[14px] leading-[1.3] tracking-[-0.56px] flex-1">
-                  {post.description}
-                </p>
-                <ReadMore />
-              </div>
+              </Fragment>
             ))}
           </div>
         </NewsDragSlider>
