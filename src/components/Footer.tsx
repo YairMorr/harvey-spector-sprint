@@ -1,10 +1,36 @@
+'use client'
+
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { LetsTalkButton } from "./LetsTalkButton";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SOCIAL_LINKS = ["Facebook", "Instagram", "X.com", "Linkedin"];
 
 export function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    gsap.fromTo(
+      footerRef.current,
+      { clipPath: "inset(100% 0 0 0)" },
+      {
+        clipPath: "inset(0% 0 0 0)",
+        duration: 1.0,
+        ease: "power3.inOut",
+        scrollTrigger: {
+          trigger: footerRef.current,
+          start: "top 90%",
+          once: true,
+        },
+      }
+    );
+  }, []);
+
   return (
-    <footer data-nav-dark className="bg-black pt-12 px-4 md:px-8 overflow-hidden">
+    <footer ref={footerRef} data-nav-dark className="fixed bottom-0 left-0 right-0 z-0 bg-black pt-12 px-4 md:px-8 overflow-hidden">
 
       {/* ── Top block ── */}
       <div className="flex flex-col gap-6 md:gap-12 mb-6 md:mb-[120px]">

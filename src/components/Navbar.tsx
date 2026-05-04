@@ -4,7 +4,13 @@ import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
 import { LetsTalkButton } from "./LetsTalkButton";
 
-const NAV_LINKS = ["About", "Services", "Projects", "News", "Contact"];
+const NAV_LINKS = [
+  { label: "About",    href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Projects", href: "/projects" },
+  { label: "News",     href: "#news" },
+  { label: "Contact",  href: "#contact" },
+];
 
 function NavLink({ label, href }: { label: string; href: string }) {
   const lineRef = useRef<HTMLSpanElement>(null);
@@ -138,7 +144,7 @@ export function Navbar() {
         {/* Desktop links */}
         <div ref={linksRef} className="hidden md:flex items-center gap-6 lg:gap-14 font-semibold text-sm lg:text-base text-black tracking-[-0.04em] capitalize">
           {NAV_LINKS.map((link) => (
-            <NavLink key={link} label={link} href={`#${link.toLowerCase()}`} />
+            <NavLink key={link.label} label={link.label} href={link.href} />
           ))}
         </div>
 
@@ -168,14 +174,14 @@ export function Navbar() {
           >
             {NAV_LINKS.map((link, i) => (
               <a
-                key={link}
+                key={link.label}
                 ref={(el) => { itemsRef.current[i] = el; }}
-                href={`#${link.toLowerCase()}`}
+                href={link.href}
                 className="font-light text-white uppercase tracking-[-0.02em] py-5 border-b border-white/10"
                 style={{ fontSize: "clamp(2rem, 8vw, 3.5rem)" }}
                 onClick={handleClose}
               >
-                {link}
+                {link.label}
               </a>
             ))}
             <div ref={(el) => { itemsRef.current[NAV_LINKS.length] = el; }} className="pt-8">

@@ -6,9 +6,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PORTRAIT_SRC =
-  "https://www.figma.com/api/mcp/asset/a7b94d0b-f852-45fb-80a9-989b893768a0";
+const PORTRAIT_SRC = "/portrait.png";
 
+ 
 const ABOUT_TEXT =
   "Placeholder paragraph one. This is where you introduce yourself — your background, your passion for your craft, and what drives you creatively. Two to three sentences work best here. Placeholder paragraph two. Here you can describe your technical approach, how you collaborate with clients, or what sets your work apart from others in your field.";
 
@@ -34,28 +34,22 @@ function PortraitWithReveal({ className, style }: { className?: string; style?: 
     const overlay = overlayRef.current;
     if (!wrap || !overlay) return;
 
-    // Paused tween — driven manually so it never reverses
-    const tl = gsap.fromTo(overlay, { x: "0%" }, { x: "100%", ease: "power2.inOut", duration: 1 });
-    tl.pause();
+    const st = gsap.fromTo(
+      overlay,
+      { x: "0%" },
+      {
+        x: "100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: wrap,
+          start: "top 85%",
+          end: "top 25%",
+          scrub: 1,
+        },
+      }
+    );
 
-    let maxProgress = 0;
-
-    const st = ScrollTrigger.create({
-      trigger: wrap,
-      start: "top 85%",
-      end: "top 25%",
-      onUpdate: (self) => {
-        if (self.progress > maxProgress) {
-          maxProgress = self.progress;
-          tl.progress(maxProgress);
-        }
-      },
-    });
-
-    return () => {
-      st.kill();
-      tl.kill();
-    };
+    return () => { st.scrollTrigger?.kill(); };
   }, []);
 
   return (
@@ -63,7 +57,6 @@ function PortraitWithReveal({ className, style }: { className?: string; style?: 
       <img
         src={PORTRAIT_SRC}
         alt="Harvey Specter portrait"
-        className="w-full h-full object-cover"
       />
       <div
         ref={overlayRef}
@@ -75,8 +68,27 @@ function PortraitWithReveal({ className, style }: { className?: string; style?: 
 }
 
 export function PortraitSection() {
+  const textBoxRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 768px)", () => {
+      gsap.to(textBoxRef.current, {
+        x: -120,
+        ease: "none",
+        scrollTrigger: {
+          trigger: textBoxRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.5,
+        },
+      });
+    });
+    return () => mm.revert();
+  }, []);
+
   return (
-    <section className="px-4 md:px-8 py-12 md:py-20">
+    <section className="bg-white px-4 md:px-8 py-12 md:py-20 overflow-hidden">
 
       {/* ── Mobile ── */}
       <div className="flex flex-col gap-5 md:hidden">
@@ -96,8 +108,10 @@ export function PortraitSection() {
           [ About ]
         </span>
 
-        <div className="flex flex-1 items-end gap-8 ml-8">
-          <div className="flex-1">
+        {/* ml-auto pushes the whole group to the right; gap-[32px] is the fixed spacing from Figma */}
+        <div className="flex items-end gap-[32px] ml-auto">
+          {/* Fixed-width text box — drifts left on scroll */}
+          <div ref={textBoxRef} className="w-[461px] shrink-0">
             <CornerFrame>
               <p className="text-[#1f1f1f] text-sm font-normal leading-[1.3] tracking-[-0.04em]">
                 {ABOUT_TEXT}
@@ -105,6 +119,7 @@ export function PortraitSection() {
             </CornerFrame>
           </div>
 
+          {/* Portrait — always immediately to the right of the text box */}
           <div className="flex items-start gap-6 shrink-0">
             <span className="font-mono text-sm text-[#1f1f1f] uppercase">002</span>
             <PortraitWithReveal className="w-[436px] h-[614px]" />
